@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>شحن الكهرباء</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        form {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: green;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: darkgreen;
+        }
+        .view-all-link {
+            display: block;
+            margin-top: 20px;
+            color: yellow;
+            text-decoration: none;
+            font-weight: bold;
+            text-align: right;
+        }
+        .view-all-link:hover {
+            color: orange;
+        }
+    </style>
+</head>
+<body>
+    <h1>شحن الكهرباء</h1>
+    <form id="form">
+        <label for="fullName">الاسم الرباعي:</label>
+        <input type="text" id="fullName" name="fullName" required>
+
+        <label for="meterNumber">رقم العداد:</label>
+        <input type="text" id="meterNumber" name="meterNumber" required>
+
+        <label for="region">اسم المنطقة:</label>
+        <input type="text" id="region" name="region" required>
+
+        <label for="chargeValue">قيمة الشحنة:</label>
+        <input type="number" id="chargeValue" name="chargeValue" required>
+
+        <button type="submit">ارسال</button>
+    </form>
+
+    <a href="all-data.html" class="view-all-link">مشاهدة جميع البيانات المدخلة</a>
+
+    <script>
+        // تحقق مما إذا كان المستخدم قد سجل الدخول
+        if (!localStorage.getItem('loggedIn')) {
+            alert('يرجى تسجيل الدخول أولاً!');
+            window.location.href = 'login.html'; // الانتقال إلى صفحة تسجيل الدخول إذا لم يكن مسجلاً
+        }
+
+        function saveDataToLocalStorage(formData) {
+            const currentData = JSON.parse(localStorage.getItem('allFormData')) || [];
+
+            // إضافة البيانات المدخلة مع وقت إدخالها
+            const newEntry = {
+                ...formData,
+                timestamp: new Date().toISOString() // تخزين وقت الإدخال
+            };
+
+            currentData.push(newEntry); // إضافة البيانات الجديدة إلى القائمة
+            localStorage.setItem('allFormData', JSON.stringify(currentData)); // تخزين القائمة المحدثة
+        }
+
+        document.getElementById('form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const formData = {
+                fullName: document.getElementById('fullName').value,
+                meterNumber: document.getElementById('meterNumber').value,
+                region: document.getElementById('region').value,
+                chargeValue: document.getElementById('chargeValue').value
+            };
+
+            saveDataToLocalStorage(formData);
+            
+            window.location.href = 'data.html'; // الانتقال إلى صفحة البيانات بعد الإرسال
+        });
+    </script>
+</body>
+</html>
